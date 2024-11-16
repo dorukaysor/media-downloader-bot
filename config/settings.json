@@ -1,8 +1,0 @@
-{
-  "maxFileSize": 5242880,
-  "supportedFormats": [
-    "jpg", "jpeg", "png", "bmp", "gif", "mp4", "mkv", "avi", "mov", "webm", "mp3", "wav", "aac", "flac", "pdf", "doc", "docx", "ppt", "pptx", "xls", "zip", "rar", "7z"
-  ],
-  "autoDelete": true,
-  "autoDeleteTime": 0
-}
