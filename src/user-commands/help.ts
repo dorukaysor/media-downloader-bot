@@ -1,6 +1,6 @@
-import { Bot } from "telegraf";
+import { Telegraf } from "telegraf";
 
-export default function helpCommand(bot: Bot) {
+export default function helpCommand(bot: Telegraf) {
   bot.command("help", (ctx) => {
     ctx.reply(
       "ℹ️ *Help Menu*\n\n" +

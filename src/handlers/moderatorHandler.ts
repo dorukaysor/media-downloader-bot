@@ -1,15 +1,18 @@
-import { Bot } from "telegraf";
+import { Telegraf } from "telegraf";
 import axios from "axios";
 
-export default function moderatorHandler(bot: Bot) {
+export default function moderatorHandler(bot: Telegraf) {
   const MODERATOR_CHAT_ID = "MODERATOR_CHAT_ID"; // Replace with the moderator's Telegram Chat ID
 
   bot.on("message", async (ctx) => {
     const senderChatId = String(ctx.message?.chat?.id);
-    const messageText = ctx.message?.text;
+    let userMessage;
+    if ('text' in ctx.message) {
+      userMessage = ctx.message.text;
+    };
 
     // Ensure the message is from the moderator
-    if (senderChatId !== MODERATOR_CHAT_ID || !messageText) return;
+    if (senderChatId !== MODERATOR_CHAT_ID || !userMessage) return;
 
     ctx.reply("⏳ Generating AI-based response, please wait...");
 
@@ -21,7 +24,7 @@ export default function moderatorHandler(bot: Bot) {
           model: "gpt-4",
           messages: [
             { role: "system", content: "You are an expert assistant responding to questions professionally." },
-            { role: "user", content: messageText },
+            { role: "user", content: userMessage },
           ],
         },
         {

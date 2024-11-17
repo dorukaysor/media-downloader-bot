@@ -1,11 +1,12 @@
-import { Bot } from "telegraf";
+import { Telegraf } from "telegraf";
 import fsExtra from "fs-extra";
 import path from "path";
-import DatabaseHandler from "../handlers/databaseHandler";
+import handleDatabase from "../handlers/cronHandler";
 import settings from "../../config/settings.json";
+import mods from "../../config/mods.json"
 
 const settingsFilePath = path.join(__dirname, "../../config/settings.json");
-let databaseHandler: DatabaseHandler | null = null;
+let databaseHandler: cronDatabase | null = null;
 
 // Helper function to save updated settings to the file
 const saveSettings = async (newSettings: any) => {
@@ -17,20 +18,21 @@ const saveSettings = async (newSettings: any) => {
   }
 };
 
-export default function settingsCommand(bot: Bot) {
+export default function settingsCommand(bot: Telegraf) {
   // Initialize DatabaseHandler when the command is loaded
   if (!databaseHandler) {
-    databaseHandler = new DatabaseHandler(settings.autoCronDB);
+    databaseHandler = new cronDatabase(settings.autoCronDB);
   }
 
   bot.command("settings", async (ctx) => {
-    const senderChatId = String(ctx.message?.chat?.id);
+    const senderChatId = ctx.message?.chat?.id;
     const args = ctx.message?.text?.split(" ").slice(1);
 
     // Authorization (replace with your moderator ID check)
-    if (!settings.moderators.includes(senderChatId)) {
+    const isModerator = mods.moderators.find((mod) => mod.userId === Number(senderChatId));
+    if (!isModerator) {
       return ctx.reply("❌ You are not authorized to use this command.");
-    }
+    };
 
     if (!args || args.length === 0) {
       return ctx.reply(
@@ -120,7 +122,16 @@ export default function settingsCommand(bot: Bot) {
       return ctx.reply("❌ Invalid command. Use `/settings` for available commands.");
     } catch (error) {
       console.error("Error in settings command:", error);
-      ctx.reply("❌ An error occurred while processing your request.");
+      return ctx.reply("❌ An error occurred while processing your request.");
     }
   });
+}
+
+interface Settings {
+  [key: string]: any;
+  botName: string;
+  botToken: string;
+  defaultCaption: string;
+  supportedFormats: string[];
+  autoCronDB: boolean;
 }

@@ -1,10 +1,10 @@
-import { Bot } from "telegraf";
+import { Telegraf } from "telegraf";
 import fsExtra from "fs-extra";
 import path from "path";
 
 const modsFilePath = path.join(__dirname, "../../config/mods.json");
 
-export default function modsConfigCommand(bot: Bot) {
+export default function modsConfigCommand(bot: Telegraf) {
   // Helper function to load moderators from file
   const loadMods = async (): Promise<string[]> => {
     try {

@@ -8,7 +8,7 @@ import reportCommand from "./user-commands/report";
 
 //Commands [ mods ]
 import settingsCommand from "./mod-commands/settings";
-import modsConfigCommand from "./mod-commands/mods-config.ts";
+import modsConfigCommand from "./mod-commands/mods-config";
 
 //Handlers
 import messageHandler from "./handlers/messageHandler";
@@ -31,4 +31,4 @@ modsConfigCommand(bot);
 messageHandler(bot);
 moderatorHandler(bot);
 
-bot.launch().then(() => console.log("✅ Bot is running!"));
+bot.launch().then(() => console.log("✅ Telegraf is running!"));

@@ -19,3 +19,4 @@ Thumbs.db
 filesystem.txt
 dev.txt
 .env
+package-lock.json

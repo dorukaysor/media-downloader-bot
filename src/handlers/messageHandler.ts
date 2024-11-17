@@ -1,10 +1,10 @@
-import { Bot } from "telegraf";
+import { Telegraf } from "telegraf";
 import axios from "axios";
 import fsExtra from "fs-extra";
 import path from "path";
 import settings from "../../config/settings.json";
 
-export default function messageHandler(bot: Bot) {
+export default function messageHandler(bot: Telegraf) {
   // Helper function to extract links from a message
   const extractLink = (text: string | undefined): string | null => {
     if (!text) return null;
@@ -14,15 +14,24 @@ export default function messageHandler(bot: Bot) {
   };
 
   bot.on("message", async (ctx) => {
-    const userMessage = ctx.message?.text || "";
+    let userMessage;
+    if ('text' in ctx.message) {
+      userMessage = ctx.message.text;
+    };
     const link = extractLink(userMessage);
-
+    
     if (link) {
-      ctx.reply("⏳ Processing your link, please wait...");
+      return ctx.reply("⏳ Processing your link, please wait...");
+      
 
       try {
         // Fetch the media file
-        const response = await axios.get(link, { responseType: "stream" });
+        let response;
+        if (link) {
+          response = await axios.get(link, { responseType: "stream" });
+        } else {
+          response = "Nullified Link!"
+        };
         const contentType = response.headers["content-type"];
 
         // Validate against supported formats
@@ -41,16 +50,16 @@ export default function messageHandler(bot: Bot) {
         response.data.pipe(writer);
 
         writer.on("finish", () => {
-          ctx.replyWithDocument({ source: filepath }, { caption: settings.defaultCaption });
+          return ctx.replyWithDocument({ source: filepath }, { caption: settings.defaultCaption });
         });
         writer.on("error", () => {
-          ctx.reply("❌ Failed to process the media.");
+          return ctx.reply("❌ Failed to process the media.");
         });
       } catch (err) {
-        ctx.reply("❌ Could not download the media. Ensure the link is correct and accessible.");
+        return ctx.reply("❌ Could not download the media. Ensure the link is correct and accessible.");
       }
     } else {
-      ctx.reply("🤖 I didn't recognize a valid link in your message. Use /help for guidance.");
+      return ctx.reply("🤖 I didn't recognize a valid link in your message. Use /help for guidance.");
     }
   });
 }

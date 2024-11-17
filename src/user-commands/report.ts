@@ -1,7 +1,7 @@
-import { Bot } from "telegraf";
+import { Telegraf } from "telegraf";
 import axios from "axios";
 
-export default function reportCommand(bot: Bot) {
+export default function reportCommand(bot: Telegraf) {
   const MODERATOR_CHAT_ID = "MODERATOR_CHAT_ID"; // Replace with the moderator's Telegram Chat ID
 
   bot.command("report", async (ctx) => {
@@ -10,7 +10,7 @@ export default function reportCommand(bot: Bot) {
       return ctx.reply("❌ Please specify the issue you want to report.\nUsage: /report <issue>");
     }
 
-    ctx.reply("⏳ Your issue is being processed. Please wait...");
+    return ctx.reply("⏳ Your issue is being processed. Please wait...");
 
     try {
       // Call OpenAI API for an AI-based response
@@ -40,10 +40,10 @@ export default function reportCommand(bot: Bot) {
         { parse_mode: "Markdown" }
       );
 
-      ctx.reply("✅ Your issue has been reported. Our moderators will review it shortly.");
+      return ctx.reply("✅ Your issue has been reported. Our moderators will review it shortly.");
     } catch (error) {
       console.error("Error in OpenAI API:", error);
-      ctx.reply("❌ There was an error processing your report. Please try again later.");
+      return ctx.reply("❌ There was an error processing your report. Please try again later.");
     }
   });
 }

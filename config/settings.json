@@ -1,6 +1,6 @@
 {
   "botName": "Media DL - DTA Bots",
-  "botToken": "7849224850:AAE2vRd-VrT3P_sFLSBNcB11YJFgyY9r14M",
+  "botToken": "<Your_Bot_Token_Here>",
   "defaultCaption": "Here is your media as requested!",
   "supportedFormats": [
     "image/jpeg",
